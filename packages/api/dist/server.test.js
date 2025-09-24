@@ -22,5 +22,12 @@ describe('buildServer', () => {
         expect(response.statusCode).toBe(200);
         expect(response.json()).toEqual({ status: 'ok' });
     });
+    it('returns service status on root path', async () => {
+        const { app } = await buildServer({ env: baseEnv });
+        closeFn = () => app.close();
+        const response = await app.inject({ method: 'GET', url: '/' });
+        expect(response.statusCode).toBe(200);
+        expect(response.json()).toMatchObject({ status: 'ok' });
+    });
 });
 //# sourceMappingURL=server.test.js.map

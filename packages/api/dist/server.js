@@ -32,6 +32,10 @@ export async function buildServer(options = {}) {
     });
     await app.register(sensible);
     app.get('/health', async () => ({ status: 'ok' }));
+    app.get('/', async () => ({
+        status: 'ok',
+        message: 'MatomoTools API is running. See /discovery for tool definitions.',
+    }));
     await registerReportingRoutes({ app, env, reportingService });
     await registerTrackingRoutes({ app, env, trackingClient });
     return { app, env };
