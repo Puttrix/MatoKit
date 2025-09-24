@@ -89,14 +89,14 @@ const discoveryTools = [
         description: 'Fetch Matomo key metrics (visits, users, pageviews, etc.) for a site/date range.',
         method: 'POST',
         path: '/tools/GetKeyNumbers',
-        inputSchema: {
+        parameters: {
             $schema: BASE_SCHEMA_URL,
             type: 'object',
             additionalProperties: false,
             properties: baseRequestProperties,
             required: ['period', 'date'],
         },
-        outputSchema: {
+        successResponseSchema: {
             $schema: BASE_SCHEMA_URL,
             oneOf: [
                 keyNumbersRowSchema,
@@ -113,7 +113,7 @@ const discoveryTools = [
         description: 'Return the most visited URLs for the specified period.',
         method: 'POST',
         path: '/tools/GetMostPopularUrls',
-        inputSchema: {
+        parameters: {
             $schema: BASE_SCHEMA_URL,
             type: 'object',
             additionalProperties: false,
@@ -127,7 +127,7 @@ const discoveryTools = [
             },
             required: ['period', 'date'],
         },
-        outputSchema: {
+        successResponseSchema: {
             $schema: BASE_SCHEMA_URL,
             type: 'array',
             items: popularUrlRowSchema,
@@ -138,7 +138,7 @@ const discoveryTools = [
         description: 'Fetch top referrers driving traffic to the site.',
         method: 'POST',
         path: '/tools/GetTopReferrers',
-        inputSchema: {
+        parameters: {
             $schema: BASE_SCHEMA_URL,
             type: 'object',
             additionalProperties: false,
@@ -148,7 +148,7 @@ const discoveryTools = [
             },
             required: ['period', 'date'],
         },
-        outputSchema: {
+        successResponseSchema: {
             $schema: BASE_SCHEMA_URL,
             type: 'array',
             items: referrerRowSchema,
@@ -159,7 +159,7 @@ const discoveryTools = [
         description: 'Return Matomo events filtered by category/action/name.',
         method: 'POST',
         path: '/tools/GetEvents',
-        inputSchema: {
+        parameters: {
             $schema: BASE_SCHEMA_URL,
             type: 'object',
             additionalProperties: false,
@@ -181,7 +181,7 @@ const discoveryTools = [
             },
             required: ['period', 'date'],
         },
-        outputSchema: {
+        successResponseSchema: {
             $schema: BASE_SCHEMA_URL,
             type: 'array',
             items: eventRowSchema,
@@ -197,7 +197,29 @@ export function buildDiscoveryManifest({ authType }) {
             version: '0.1.0',
         },
         auth: { type: authType },
-        tools: discoveryTools,
+        tools: discoveryTools.map((tool) => ({
+            type: 'function',
+            function: {
+                name: tool.name,
+                description: tool.description,
+                transport: {
+                    type: 'http',
+                    method: tool.method,
+                    path: tool.path,
+                },
+                parameters: tool.parameters,
+                responses: {
+                    '200': {
+                        description: 'Successful response',
+                        content: {
+                            'application/json': {
+                                schema: tool.successResponseSchema,
+                            },
+                        },
+                    },
+                },
+            },
+        })),
     };
 }
 //# sourceMappingURL=discovery.js.map

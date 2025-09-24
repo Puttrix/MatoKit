@@ -138,12 +138,16 @@ describe('reporting routes', () => {
     expect(manifest.tools).toHaveLength(4);
     expect(manifest.auth).toEqual({ type: 'bearer' });
 
-    const keyNumbers = manifest.tools.find((tool: { name: string }) => tool.name === 'GetKeyNumbers');
-    expect(keyNumbers.inputSchema.required).toEqual(['period', 'date']);
-    expect(keyNumbers.outputSchema.oneOf).toHaveLength(2);
+    const keyNumbers = manifest.tools.find(
+      (tool: { function?: { name: string } }) => tool.function?.name === 'GetKeyNumbers',
+    )?.function;
+    expect(keyNumbers?.parameters?.required).toEqual(['period', 'date']);
+    expect(keyNumbers?.responses?.['200']?.content?.['application/json']?.schema.oneOf).toHaveLength(2);
 
-    const events = manifest.tools.find((tool: { name: string }) => tool.name === 'GetEvents');
-    expect(events.inputSchema.properties).toMatchObject({
+    const events = manifest.tools.find(
+      (tool: { function?: { name: string } }) => tool.function?.name === 'GetEvents',
+    )?.function;
+    expect(events?.parameters?.properties).toMatchObject({
       category: { type: 'string' },
       action: { type: 'string' },
       name: { type: 'string' },
