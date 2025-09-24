@@ -44,6 +44,12 @@ SDK and Opal-compatible tool API that make Matomo analytics accessible to LLM ag
    Check logs with `docker compose logs -f matokit-api` and hit `http://localhost:3000/health` or `/discovery` to verify.
 4. Place the container behind your reverse proxy (Traefik, Caddy, Nginx, etc.) so `https://<your-domain>/discovery` is publicly reachable for Opal.
 
+### Portainer Stack Deployment
+1. In Portainer, go to **Stacks → Add Stack** and give it a name such as `matokit-api`.
+2. Copy the contents of `docker-compose.example.yml` into the stack editor and adjust the environment variables to match your Matomo instance (or reference an `.env` file via `env_file` if you prefer).
+3. Deploy the stack. After it starts, open the stack details and tail the service logs to confirm Fastify reports `listening on 0.0.0.0:3000`.
+4. From another terminal, run `curl http://<host>:3000/health` (or `/discovery`) to verify the service is reachable before exposing it through your reverse proxy.
+
 ## Workflow Notes
 - Maintain planning artifacts in `.codex/planning` and long-lived context in `.codex/memory`.
 - **Whenever a task or milestone is completed, update this README with the latest status or achievements.**
