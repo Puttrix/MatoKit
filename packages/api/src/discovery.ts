@@ -1,0 +1,221 @@
+import { PERIODS } from './schemas/reporting';
+
+export type AuthType = 'bearer' | 'none';
+
+export interface DiscoveryOptions {
+  authType: AuthType;
+}
+
+const BASE_SCHEMA_URL = 'https://json-schema.org/draft/2020-12/schema';
+
+const siteIdProperty = {
+  type: 'integer',
+  minimum: 1,
+  description: 'Matomo site ID. Defaults to DEFAULT_SITE_ID when omitted.',
+};
+
+const periodProperty = {
+  type: 'string',
+  enum: [...PERIODS],
+  description: 'Matomo period (day, week, month, year, range).',
+};
+
+const dateProperty = {
+  type: 'string',
+  description: 'Date expression accepted by Matomo (e.g. 2024-03-01, today, last7).',
+};
+
+const segmentProperty = {
+  type: 'string',
+  description: 'Optional Matomo segment expression (see Matomo Segmentation docs).',
+};
+
+const limitProperty = {
+  type: 'integer',
+  minimum: 1,
+  maximum: 1000,
+  description: 'Maximum rows to return (defaults vary by endpoint).',
+};
+
+const baseRequestProperties = {
+  siteId: siteIdProperty,
+  period: periodProperty,
+  date: dateProperty,
+  segment: segmentProperty,
+};
+
+const keyNumbersRowSchema = {
+  type: 'object',
+  additionalProperties: true,
+  properties: {
+    nb_visits: { type: 'number' },
+    nb_uniq_visitors: { type: 'number' },
+    nb_users: { type: 'number' },
+    nb_pageviews: { type: 'number' },
+    nb_actions: { type: 'number' },
+    sum_visit_length: { type: 'number' },
+    bounce_rate: { type: 'number' },
+    avg_time_on_site: { type: 'number' },
+  },
+  required: ['nb_visits'],
+};
+
+const popularUrlRowSchema = {
+  type: 'object',
+  additionalProperties: true,
+  properties: {
+    label: { type: 'string' },
+    url: { type: 'string' },
+    nb_hits: { type: 'number' },
+    nb_visits: { type: 'number' },
+    sum_time_spent: { type: 'number' },
+  },
+  required: ['label', 'nb_hits'],
+};
+
+const referrerRowSchema = {
+  type: 'object',
+  additionalProperties: true,
+  properties: {
+    label: { type: 'string' },
+    url: { type: 'string' },
+    referrer_type: { type: 'string' },
+    nb_visits: { type: 'number' },
+    nb_hits: { type: 'number' },
+  },
+  required: ['label', 'nb_visits'],
+};
+
+const eventRowSchema = {
+  type: 'object',
+  additionalProperties: true,
+  properties: {
+    label: { type: 'string' },
+    nb_events: { type: 'number' },
+    nb_visits: { type: 'number' },
+    nb_hits: { type: 'number' },
+    sum_event_value: { type: 'number' },
+    max_event_value: { type: 'number' },
+    min_event_value: { type: 'number' },
+  },
+  required: ['label', 'nb_events'],
+};
+
+const discoveryTools = [
+  {
+    name: 'GetKeyNumbers',
+    description: 'Fetch Matomo key metrics (visits, users, pageviews, etc.) for a site/date range.',
+    method: 'POST',
+    path: '/tools/GetKeyNumbers',
+    inputSchema: {
+      $schema: BASE_SCHEMA_URL,
+      type: 'object',
+      additionalProperties: false,
+      properties: baseRequestProperties,
+      required: ['period', 'date'],
+    },
+    outputSchema: {
+      $schema: BASE_SCHEMA_URL,
+      oneOf: [
+        keyNumbersRowSchema,
+        {
+          type: 'object',
+          description: 'Keyed result (e.g. by date) containing key-number rows.',
+          additionalProperties: keyNumbersRowSchema,
+        },
+      ],
+    },
+  },
+  {
+    name: 'GetMostPopularUrls',
+    description: 'Return the most visited URLs for the specified period.',
+    method: 'POST',
+    path: '/tools/GetMostPopularUrls',
+    inputSchema: {
+      $schema: BASE_SCHEMA_URL,
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        ...baseRequestProperties,
+        limit: limitProperty,
+        flat: {
+          type: 'boolean',
+          description: 'Set false to include hierarchical labels instead of flat list.',
+        },
+      },
+      required: ['period', 'date'],
+    },
+    outputSchema: {
+      $schema: BASE_SCHEMA_URL,
+      type: 'array',
+      items: popularUrlRowSchema,
+    },
+  },
+  {
+    name: 'GetTopReferrers',
+    description: 'Fetch top referrers driving traffic to the site.',
+    method: 'POST',
+    path: '/tools/GetTopReferrers',
+    inputSchema: {
+      $schema: BASE_SCHEMA_URL,
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        ...baseRequestProperties,
+        limit: limitProperty,
+      },
+      required: ['period', 'date'],
+    },
+    outputSchema: {
+      $schema: BASE_SCHEMA_URL,
+      type: 'array',
+      items: referrerRowSchema,
+    },
+  },
+  {
+    name: 'GetEvents',
+    description: 'Return Matomo events filtered by category/action/name.',
+    method: 'POST',
+    path: '/tools/GetEvents',
+    inputSchema: {
+      $schema: BASE_SCHEMA_URL,
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        ...baseRequestProperties,
+        category: {
+          type: 'string',
+          description: 'Event category filter (optional).',
+        },
+        action: {
+          type: 'string',
+          description: 'Event action filter (optional).',
+        },
+        name: {
+          type: 'string',
+          description: 'Event name filter (optional).',
+        },
+        limit: limitProperty,
+      },
+      required: ['period', 'date'],
+    },
+    outputSchema: {
+      $schema: BASE_SCHEMA_URL,
+      type: 'array',
+      items: eventRowSchema,
+    },
+  },
+];
+
+export function buildDiscoveryManifest({ authType }: DiscoveryOptions) {
+  return {
+    schemaVersion: '1',
+    service: {
+      name: 'MatomoTools',
+      description: 'LLM-callable endpoints for Matomo analytics',
+      version: '0.1.0',
+    },
+    auth: { type: authType },
+    tools: discoveryTools,
+  };
+}
