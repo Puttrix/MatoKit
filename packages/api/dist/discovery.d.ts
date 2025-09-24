@@ -22,7 +22,6 @@ export declare function buildDiscoveryManifest({ authType }: DiscoveryOptions): 
                 properties: {
                     siteId: {
                         type: string;
-                        minimum: number;
                         description: string;
                     };
                     period: {
@@ -45,8 +44,6 @@ export declare function buildDiscoveryManifest({ authType }: DiscoveryOptions): 
                 properties: {
                     limit: {
                         type: string;
-                        minimum: number;
-                        maximum: number;
                         description: string;
                     };
                     flat: {
@@ -55,7 +52,6 @@ export declare function buildDiscoveryManifest({ authType }: DiscoveryOptions): 
                     };
                     siteId: {
                         type: string;
-                        minimum: number;
                         description: string;
                     };
                     period: {
@@ -78,13 +74,10 @@ export declare function buildDiscoveryManifest({ authType }: DiscoveryOptions): 
                 properties: {
                     limit: {
                         type: string;
-                        minimum: number;
-                        maximum: number;
                         description: string;
                     };
                     siteId: {
                         type: string;
-                        minimum: number;
                         description: string;
                     };
                     period: {
@@ -119,13 +112,10 @@ export declare function buildDiscoveryManifest({ authType }: DiscoveryOptions): 
                     };
                     limit: {
                         type: string;
-                        minimum: number;
-                        maximum: number;
                         description: string;
                     };
                     siteId: {
                         type: string;
-                        minimum: number;
                         description: string;
                     };
                     period: {
@@ -146,44 +136,38 @@ export declare function buildDiscoveryManifest({ authType }: DiscoveryOptions): 
             };
             returns: {
                 type: string;
-                description: string;
-                additionalProperties: {
-                    type: string;
-                    additionalProperties: boolean;
-                    properties: {
-                        nb_visits: {
-                            type: string;
-                        };
-                        nb_uniq_visitors: {
-                            type: string;
-                        };
-                        nb_users: {
-                            type: string;
-                        };
-                        nb_pageviews: {
-                            type: string;
-                        };
-                        nb_actions: {
-                            type: string;
-                        };
-                        sum_visit_length: {
-                            type: string;
-                        };
-                        bounce_rate: {
-                            type: string;
-                        };
-                        avg_time_on_site: {
-                            type: string;
-                        };
+                properties: {
+                    nb_visits: {
+                        type: string;
                     };
-                    required: string[];
+                    nb_uniq_visitors: {
+                        type: string;
+                    };
+                    nb_users: {
+                        type: string;
+                    };
+                    nb_pageviews: {
+                        type: string;
+                    };
+                    nb_actions: {
+                        type: string;
+                    };
+                    sum_visit_length: {
+                        type: string;
+                    };
+                    bounce_rate: {
+                        type: string;
+                    };
+                    avg_time_on_site: {
+                        type: string;
+                    };
                 };
+                required: string[];
                 items?: undefined;
             } | {
                 type: string;
                 items: {
                     type: string;
-                    additionalProperties: boolean;
                     properties: {
                         label: {
                             type: string;
@@ -203,13 +187,12 @@ export declare function buildDiscoveryManifest({ authType }: DiscoveryOptions): 
                     };
                     required: string[];
                 };
-                description?: undefined;
-                additionalProperties?: undefined;
+                properties?: undefined;
+                required?: undefined;
             } | {
                 type: string;
                 items: {
                     type: string;
-                    additionalProperties: boolean;
                     properties: {
                         label: {
                             type: string;
@@ -229,13 +212,12 @@ export declare function buildDiscoveryManifest({ authType }: DiscoveryOptions): 
                     };
                     required: string[];
                 };
-                description?: undefined;
-                additionalProperties?: undefined;
+                properties?: undefined;
+                required?: undefined;
             } | {
                 type: string;
                 items: {
                     type: string;
-                    additionalProperties: boolean;
                     properties: {
                         label: {
                             type: string;
@@ -261,8 +243,8 @@ export declare function buildDiscoveryManifest({ authType }: DiscoveryOptions): 
                     };
                     required: string[];
                 };
-                description?: undefined;
-                additionalProperties?: undefined;
+                properties?: undefined;
+                required?: undefined;
             };
         };
         transport: {

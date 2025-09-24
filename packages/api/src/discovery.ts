@@ -6,45 +6,28 @@ export interface DiscoveryOptions {
   authType: AuthType;
 }
 
-const siteIdProperty = {
-  type: 'integer',
-  minimum: 1,
-  description: 'Matomo site ID. Defaults to DEFAULT_SITE_ID when omitted.',
-};
-
-const periodProperty = {
-  type: 'string',
-  enum: [...PERIODS],
-  description: 'Matomo period (day, week, month, year, range).',
-};
-
-const dateProperty = {
-  type: 'string',
-  description: 'Date expression accepted by Matomo (e.g. 2024-03-01, today, last7).',
-};
-
-const segmentProperty = {
-  type: 'string',
-  description: 'Optional Matomo segment expression (see Matomo Segmentation docs).',
-};
-
-const limitProperty = {
-  type: 'integer',
-  minimum: 1,
-  maximum: 1000,
-  description: 'Maximum rows to return (defaults vary by endpoint).',
-};
-
 const baseRequestProperties = {
-  siteId: siteIdProperty,
-  period: periodProperty,
-  date: dateProperty,
-  segment: segmentProperty,
+  siteId: {
+    type: 'integer',
+    description: 'Matomo site ID. Defaults to DEFAULT_SITE_ID when omitted.',
+  },
+  period: {
+    type: 'string',
+    enum: [...PERIODS],
+    description: 'Matomo period (day, week, month, year, range).',
+  },
+  date: {
+    type: 'string',
+    description: 'Date expression accepted by Matomo (e.g. 2024-03-01, today, last7).',
+  },
+  segment: {
+    type: 'string',
+    description: 'Optional Matomo segment expression (see Matomo Segmentation docs).',
+  },
 };
 
 const keyNumbersRowSchema = {
   type: 'object',
-  additionalProperties: true,
   properties: {
     nb_visits: { type: 'number' },
     nb_uniq_visitors: { type: 'number' },
@@ -60,7 +43,6 @@ const keyNumbersRowSchema = {
 
 const popularUrlRowSchema = {
   type: 'object',
-  additionalProperties: true,
   properties: {
     label: { type: 'string' },
     url: { type: 'string' },
@@ -73,7 +55,6 @@ const popularUrlRowSchema = {
 
 const referrerRowSchema = {
   type: 'object',
-  additionalProperties: true,
   properties: {
     label: { type: 'string' },
     url: { type: 'string' },
@@ -86,7 +67,6 @@ const referrerRowSchema = {
 
 const eventRowSchema = {
   type: 'object',
-  additionalProperties: true,
   properties: {
     label: { type: 'string' },
     nb_events: { type: 'number' },
@@ -112,8 +92,8 @@ const discoveryTools = [
     },
     returns: {
       type: 'object',
-      description: 'Key-number metrics returned by Matomo.',
-      additionalProperties: keyNumbersRowSchema,
+      properties: keyNumbersRowSchema.properties,
+      required: keyNumbersRowSchema.required,
     },
   },
   {
@@ -125,7 +105,10 @@ const discoveryTools = [
       type: 'object',
       properties: {
         ...baseRequestProperties,
-        limit: limitProperty,
+        limit: {
+          type: 'integer',
+          description: 'Maximum rows to return (defaults vary by endpoint).',
+        },
         flat: {
           type: 'boolean',
           description: 'Set false to include hierarchical labels instead of flat list.',
@@ -147,7 +130,10 @@ const discoveryTools = [
       type: 'object',
       properties: {
         ...baseRequestProperties,
-        limit: limitProperty,
+        limit: {
+          type: 'integer',
+          description: 'Maximum rows to return (defaults vary by endpoint).',
+        },
       },
       required: ['period', 'date'],
     },
@@ -177,7 +163,10 @@ const discoveryTools = [
           type: 'string',
           description: 'Event name filter (optional).',
         },
-        limit: limitProperty,
+        limit: {
+          type: 'integer',
+          description: 'Maximum rows to return (defaults vary by endpoint).',
+        },
       },
       required: ['period', 'date'],
     },

@@ -115,8 +115,7 @@ describe('reporting routes', () => {
         expect(manifest.auth).toEqual({ type: 'bearer' });
         const keyNumbers = manifest.tools.find((tool) => tool.function?.name === 'GetKeyNumbers')?.function;
         expect(keyNumbers?.parameters?.required).toEqual(['period', 'date']);
-        expect(keyNumbers?.returns?.description).toContain('Key-number');
-        expect(keyNumbers?.returns?.additionalProperties?.required).toEqual(['nb_visits']);
+        expect(keyNumbers?.returns?.required).toEqual(['nb_visits']);
         const events = manifest.tools.find((tool) => tool.function?.name === 'GetEvents')?.function;
         expect(events?.parameters?.properties).toMatchObject({
             category: { type: 'string' },
