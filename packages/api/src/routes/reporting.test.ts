@@ -142,7 +142,8 @@ describe('reporting routes', () => {
       (tool: { function?: { name: string } }) => tool.function?.name === 'GetKeyNumbers',
     )?.function;
     expect(keyNumbers?.parameters?.required).toEqual(['period', 'date']);
-    expect(keyNumbers?.returns?.oneOf).toHaveLength(2);
+    expect(keyNumbers?.returns?.description).toContain('Key-number');
+    expect(keyNumbers?.returns?.additionalProperties?.required).toEqual(['nb_visits']);
 
     const events = manifest.tools.find(
       (tool: { function?: { name: string } }) => tool.function?.name === 'GetEvents',
@@ -152,6 +153,7 @@ describe('reporting routes', () => {
       action: { type: 'string' },
       name: { type: 'string' },
     });
+    expect(events?.returns?.type).toBe('array');
   });
 
   it('marks cached responses on subsequent calls', async () => {

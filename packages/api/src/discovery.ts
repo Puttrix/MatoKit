@@ -6,8 +6,6 @@ export interface DiscoveryOptions {
   authType: AuthType;
 }
 
-const BASE_SCHEMA_URL = 'https://json-schema.org/draft/2020-12/schema';
-
 const siteIdProperty = {
   type: 'integer',
   minimum: 1,
@@ -108,22 +106,14 @@ const discoveryTools = [
     method: 'POST',
     path: '/tools/GetKeyNumbers',
     parameters: {
-      $schema: BASE_SCHEMA_URL,
       type: 'object',
-      additionalProperties: false,
       properties: baseRequestProperties,
       required: ['period', 'date'],
     },
     returns: {
-      $schema: BASE_SCHEMA_URL,
-      oneOf: [
-        keyNumbersRowSchema,
-        {
-          type: 'object',
-          description: 'Keyed result (e.g. by date) containing key-number rows.',
-          additionalProperties: keyNumbersRowSchema,
-        },
-      ],
+      type: 'object',
+      description: 'Key-number metrics returned by Matomo.',
+      additionalProperties: keyNumbersRowSchema,
     },
   },
   {
@@ -132,9 +122,7 @@ const discoveryTools = [
     method: 'POST',
     path: '/tools/GetMostPopularUrls',
     parameters: {
-      $schema: BASE_SCHEMA_URL,
       type: 'object',
-      additionalProperties: false,
       properties: {
         ...baseRequestProperties,
         limit: limitProperty,
@@ -146,7 +134,6 @@ const discoveryTools = [
       required: ['period', 'date'],
     },
     returns: {
-      $schema: BASE_SCHEMA_URL,
       type: 'array',
       items: popularUrlRowSchema,
     },
@@ -157,9 +144,7 @@ const discoveryTools = [
     method: 'POST',
     path: '/tools/GetTopReferrers',
     parameters: {
-      $schema: BASE_SCHEMA_URL,
       type: 'object',
-      additionalProperties: false,
       properties: {
         ...baseRequestProperties,
         limit: limitProperty,
@@ -167,7 +152,6 @@ const discoveryTools = [
       required: ['period', 'date'],
     },
     returns: {
-      $schema: BASE_SCHEMA_URL,
       type: 'array',
       items: referrerRowSchema,
     },
@@ -178,9 +162,7 @@ const discoveryTools = [
     method: 'POST',
     path: '/tools/GetEvents',
     parameters: {
-      $schema: BASE_SCHEMA_URL,
       type: 'object',
-      additionalProperties: false,
       properties: {
         ...baseRequestProperties,
         category: {
@@ -200,7 +182,6 @@ const discoveryTools = [
       required: ['period', 'date'],
     },
     returns: {
-      $schema: BASE_SCHEMA_URL,
       type: 'array',
       items: eventRowSchema,
     },
