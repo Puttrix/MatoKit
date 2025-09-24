@@ -37,7 +37,12 @@ SDK and Opal-compatible tool API that make Matomo analytics accessible to LLM ag
      -e PORT=3000 -e HOST=0.0.0.0 \
      matokit-api
    ```
-3. For a longer-lived setup, copy `docker-compose.example.yml` to your stack, configure the env vars, and place the service behind your reverse proxy so `https://<your-domain>/discovery` is reachable by Opal.
+3. For a longer-lived setup, copy `docker-compose.example.yml` to your stack, configure the env vars (or point to an `.env` file), and run:
+   ```bash
+   docker compose -f docker-compose.example.yml up --build -d
+   ```
+   Check logs with `docker compose logs -f matokit-api` and hit `http://localhost:3000/health` or `/discovery` to verify.
+4. Place the container behind your reverse proxy (Traefik, Caddy, Nginx, etc.) so `https://<your-domain>/discovery` is publicly reachable for Opal.
 
 ## Workflow Notes
 - Maintain planning artifacts in `.codex/planning` and long-lived context in `.codex/memory`.
