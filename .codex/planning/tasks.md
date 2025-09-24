@@ -8,6 +8,7 @@ Short-term tasks suitable for the current working session. Move completed items 
 ## Next
 - Plan instrumentation/metrics for tracking queue throughput and error monitoring.
 - Outline caching invalidation strategy for long-running workers.
+- Remove Matomo tracking/write capabilities so the service is read-only.
 
 ## Blocked
 - Obtain Matomo test instance credentials (base URL, token, site ID) for integration testing.
