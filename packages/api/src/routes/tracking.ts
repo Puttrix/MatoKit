@@ -1,12 +1,12 @@
 import { MatomoTrackingClient } from '@matokit/sdk';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
-import type { Env } from '../config';
+import type { Env } from '../config.js';
 import {
   TrackEventSchema,
   TrackGoalSchema,
   TrackPageviewSchema,
-} from '../schemas/tracking';
+} from '../schemas/tracking.js';
 
 function ensureAuthorized(env: Env, request: FastifyRequest, reply: FastifyReply): boolean {
   if (!env.OPAL_BEARER_TOKEN) {

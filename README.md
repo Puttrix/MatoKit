@@ -23,6 +23,22 @@ SDK and Opal-compatible tool API that make Matomo analytics accessible to LLM ag
    curl -H "Authorization: Bearer $OPAL_BEARER_TOKEN" http://localhost:3000/.well-known/tools.json | jq
    ```
 
+## Docker Deployment
+1. Build the container locally:
+   ```bash
+   docker build -t matokit-api .
+   ```
+2. Run with the required environment variables (replace with your values):
+   ```bash
+   docker run --rm -p 3000:3000 \
+     -e MATOMO_BASE_URL=https://analytics.example.com \
+     -e MATOMO_TOKEN=your-matomo-token \
+     -e OPAL_BEARER_TOKEN=change-me \
+     -e PORT=3000 -e HOST=0.0.0.0 \
+     matokit-api
+   ```
+3. For a longer-lived setup, copy `docker-compose.example.yml` to your stack, configure the env vars, and place the service behind your reverse proxy so `https://<your-domain>/discovery` is reachable by Opal.
+
 ## Workflow Notes
 - Maintain planning artifacts in `.codex/planning` and long-lived context in `.codex/memory`.
 - **Whenever a task or milestone is completed, update this README with the latest status or achievements.**

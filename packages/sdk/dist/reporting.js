@@ -1,5 +1,5 @@
-import { ReportingCache } from './cache';
-import { EventRowSchema, EventsSchema, KeyNumbersSchema, PopularUrlsSchema, TopReferrersSchema, } from './schemas/reporting';
+import { ReportingCache } from './cache.js';
+import { EventRowSchema, EventsSchema, KeyNumbersSchema, PopularUrlsSchema, TopReferrersSchema, } from './schemas/reporting.js';
 export const MATOMO_PERIODS = ['day', 'week', 'month', 'year', 'range'];
 function buildBaseParams(options) {
     const params = {

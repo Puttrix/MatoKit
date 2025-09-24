@@ -1,0 +1,18 @@
+version: '3.9'
+services:
+  matokit-api:
+    build: .
+    image: matokit/api:local
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      MATOMO_BASE_URL: https://analytics.example.com
+      MATOMO_TOKEN: your-matomo-token
+      # DEFAULT_SITE_ID: 1
+      OPAL_BEARER_TOKEN: change-me
+      PORT: 3000
+      HOST: 0.0.0.0
+    # For external TLS, put this behind your reverse proxy (Traefik/Caddy/Nginx)
+    # and expose the `/discovery` endpoint publicly over HTTPS.

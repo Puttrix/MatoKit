@@ -1,5 +1,5 @@
 import PQueue from 'p-queue';
-import { MatomoClientError } from './errors';
+import { MatomoClientError } from './errors.js';
 const DEFAULT_TRACK_PATH = 'matomo.php';
 const DEFAULT_RETRY_DELAY_MS = 300;
 function ensureSiteId(config, siteId) {

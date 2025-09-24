@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { EventRowSchema, EventsSchema, KeyNumbersRowSchema, KeyNumbersSchema, PopularUrlRowSchema, PopularUrlsSchema, ReferrerRowSchema, TopReferrersSchema, } from './reporting';
+import { EventRowSchema, EventsSchema, KeyNumbersRowSchema, KeyNumbersSchema, PopularUrlRowSchema, PopularUrlsSchema, ReferrerRowSchema, TopReferrersSchema, } from './reporting.js';
 describe('reporting schemas', () => {
     it('coerces numeric strings in key numbers rows', () => {
         const parsed = KeyNumbersRowSchema.parse({

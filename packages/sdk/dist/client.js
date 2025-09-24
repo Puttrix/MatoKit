@@ -1,4 +1,4 @@
-import { MatomoClientError } from './errors';
+import { MatomoClientError } from './errors.js';
 const MATOMO_DEFAULT_API_PATH = 'index.php';
 const MATOMO_DEFAULT_FORMAT = 'json';
 function buildSearchParams(config, options) {

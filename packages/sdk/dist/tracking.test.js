@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { MatomoTrackingClient, } from './tracking';
+import { MatomoTrackingClient, } from './tracking.js';
 describe('MatomoTrackingClient', () => {
     const baseConfig = {
         baseUrl: 'https://matomo.example.com/',

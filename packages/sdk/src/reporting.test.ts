@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import type { MatomoClient } from './client';
+import type { MatomoClient } from './client.js';
 import {
   type GetEventsOptions,
   type GetKeyNumbersOptions,
   type GetMostPopularUrlsOptions,
   type GetTopReferrersOptions,
   ReportingService,
-} from './reporting';
+} from './reporting.js';
 
 describe('reporting helpers', () => {
   const baseOptions = {

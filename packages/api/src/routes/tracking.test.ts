@@ -1,7 +1,7 @@
 import type { MatomoTrackingClient } from '@matokit/sdk';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { buildServer } from '../server';
+import { buildServer } from '../server.js';
 
 describe('tracking routes', () => {
   const baseEnv = {

@@ -1,4 +1,4 @@
-import { TrackEventSchema, TrackGoalSchema, TrackPageviewSchema, } from '../schemas/tracking';
+import { TrackEventSchema, TrackGoalSchema, TrackPageviewSchema, } from '../schemas/tracking.js';
 function ensureAuthorized(env, request, reply) {
     if (!env.OPAL_BEARER_TOKEN) {
         return true;

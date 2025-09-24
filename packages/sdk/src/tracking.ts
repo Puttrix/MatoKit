@@ -1,6 +1,6 @@
 import PQueue from 'p-queue';
 
-import { MatomoClientError } from './errors';
+import { MatomoClientError } from './errors.js';
 
 export interface TrackingClientConfig {
   baseUrl: string;

@@ -9,10 +9,10 @@ import {
 } from '@matokit/sdk';
 import fastify, { type FastifyInstance } from 'fastify';
 
-import type { Env } from './config';
-import { loadEnv } from './config';
-import { registerReportingRoutes } from './routes/reporting';
-import { registerTrackingRoutes } from './routes/tracking';
+import type { Env } from './config.js';
+import { loadEnv } from './config.js';
+import { registerReportingRoutes } from './routes/reporting.js';
+import { registerTrackingRoutes } from './routes/tracking.js';
 
 export interface BuildServerOptions {
   env?: Env;

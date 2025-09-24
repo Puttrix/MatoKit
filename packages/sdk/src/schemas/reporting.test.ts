@@ -9,7 +9,7 @@ import {
   PopularUrlsSchema,
   ReferrerRowSchema,
   TopReferrersSchema,
-} from './reporting';
+} from './reporting.js';
 
 describe('reporting schemas', () => {
   it('coerces numeric strings in key numbers rows', () => {

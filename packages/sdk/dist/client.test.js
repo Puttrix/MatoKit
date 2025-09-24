@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
-import { createMatomoClient } from './client';
+import { createMatomoClient } from './client.js';
 describe('createMatomoClient', () => {
     const baseUrl = 'https://matomo.example.com/';
     const tokenAuth = 'secret-token';

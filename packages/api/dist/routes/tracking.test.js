@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { buildServer } from '../server';
+import { buildServer } from '../server.js';
 describe('tracking routes', () => {
     const baseEnv = {
         NODE_ENV: 'test',

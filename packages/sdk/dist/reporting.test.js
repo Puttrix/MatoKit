@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { ReportingService, } from './reporting';
+import { ReportingService, } from './reporting.js';
 describe('reporting helpers', () => {
     const baseOptions = {
         siteId: 1,

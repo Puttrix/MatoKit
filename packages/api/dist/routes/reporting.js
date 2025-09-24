@@ -1,6 +1,6 @@
 import { MatomoClientError, } from '@matokit/sdk';
-import { buildDiscoveryManifest } from '../discovery';
-import { GetEventsRequestSchema, GetKeyNumbersRequestSchema, GetMostPopularUrlsRequestSchema, GetTopReferrersRequestSchema, } from '../schemas/reporting';
+import { buildDiscoveryManifest } from '../discovery.js';
+import { GetEventsRequestSchema, GetKeyNumbersRequestSchema, GetMostPopularUrlsRequestSchema, GetTopReferrersRequestSchema, } from '../schemas/reporting.js';
 function resolveSiteId(env, siteId) {
     if (siteId) {
         return siteId;

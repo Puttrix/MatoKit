@@ -4,7 +4,7 @@ import {
   MatomoTrackingClient,
   type TrackEventOptions,
   type TrackPageviewOptions,
-} from './tracking';
+} from './tracking.js';
 
 describe('MatomoTrackingClient', () => {
   const baseConfig = {

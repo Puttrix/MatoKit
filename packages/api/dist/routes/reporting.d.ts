@@ -1,6 +1,6 @@
 import { ReportingService } from '@matokit/sdk';
 import type { FastifyInstance } from 'fastify';
-import type { Env } from '../config';
+import type { Env } from '../config.js';
 export interface RegisterReportingRoutesOptions {
     app: FastifyInstance;
     env: Env;

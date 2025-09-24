@@ -1,6 +1,6 @@
-import { type ReportingCacheOptions } from './cache';
-import type { MatomoClient } from './client';
-import { type EventRow, type KeyNumbersResponse, type PopularUrlRow, type ReferrerRow } from './schemas/reporting';
+import { type ReportingCacheOptions } from './cache.js';
+import type { MatomoClient } from './client.js';
+import { type EventRow, type KeyNumbersResponse, type PopularUrlRow, type ReferrerRow } from './schemas/reporting.js';
 export type ReportingClientOptions = ReportingCacheOptions;
 export declare const MATOMO_PERIODS: readonly ["day", "week", "month", "year", "range"];
 export type Period = (typeof MATOMO_PERIODS)[number];

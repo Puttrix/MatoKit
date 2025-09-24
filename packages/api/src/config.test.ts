@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { EnvValidationError, loadEnv } from './config';
+import { EnvValidationError, loadEnv } from './config.js';
 
 describe('loadEnv', () => {
   const baseConfig = {

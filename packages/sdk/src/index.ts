@@ -3,8 +3,8 @@ export {
   type MatomoClient,
   type MatomoClientConfig,
   type MatomoGetOptions,
-} from './client';
-export { MatomoClientError, type MatomoClientErrorCode } from './errors';
+} from './client.js';
+export { MatomoClientError, type MatomoClientErrorCode } from './errors.js';
 export {
   type GetEventsOptions,
   type GetKeyNumbersOptions,
@@ -15,7 +15,7 @@ export {
   type ReportingClientOptions,
   type ReportingResult,
   ReportingService,
-} from './reporting';
+} from './reporting.js';
 export {
   type EventRow,
   EventRowSchema,
@@ -31,10 +31,10 @@ export {
   type ReferrerRow,
   ReferrerRowSchema,
   TopReferrersSchema,
-} from './schemas/reporting';
+} from './schemas/reporting.js';
 export {
   MatomoTrackingClient,
   type TrackEventOptions,
   type TrackGoalOptions,
   type TrackPageviewOptions,
-} from './tracking';
+} from './tracking.js';

@@ -4,14 +4,14 @@ import {
 } from '@matokit/sdk';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
-import type { Env } from '../config';
-import { buildDiscoveryManifest } from '../discovery';
+import type { Env } from '../config.js';
+import { buildDiscoveryManifest } from '../discovery.js';
 import {
   GetEventsRequestSchema,
   GetKeyNumbersRequestSchema,
   GetMostPopularUrlsRequestSchema,
   GetTopReferrersRequestSchema,
-} from '../schemas/reporting';
+} from '../schemas/reporting.js';
 
 function resolveSiteId(env: Env, siteId: number | undefined): number {
   if (siteId) {

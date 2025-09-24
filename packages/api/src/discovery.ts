@@ -1,4 +1,4 @@
-import { PERIODS } from './schemas/reporting';
+import { PERIODS } from './schemas/reporting.js';
 
 export type AuthType = 'bearer' | 'none';
 

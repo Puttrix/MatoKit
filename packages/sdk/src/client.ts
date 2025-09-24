@@ -1,6 +1,6 @@
 import type { ZodType } from 'zod';
 
-import { MatomoClientError } from './errors';
+import { MatomoClientError } from './errors.js';
 
 export type MatomoParamValue = string | number | boolean | null | undefined;
 

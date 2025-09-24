@@ -1,5 +1,5 @@
-import { ReportingCache, type ReportingCacheOptions } from './cache';
-import type { MatomoClient } from './client';
+import { ReportingCache, type ReportingCacheOptions } from './cache.js';
+import type { MatomoClient } from './client.js';
 import {
   type EventRow,
   EventRowSchema,
@@ -10,7 +10,7 @@ import {
   PopularUrlsSchema,
   type ReferrerRow,
   TopReferrersSchema,
-} from './schemas/reporting';
+} from './schemas/reporting.js';
 
 export type ReportingClientOptions = ReportingCacheOptions;
 

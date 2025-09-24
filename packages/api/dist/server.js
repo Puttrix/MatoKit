@@ -3,9 +3,9 @@ import helmet from '@fastify/helmet';
 import sensible from '@fastify/sensible';
 import { createMatomoClient, MatomoTrackingClient, ReportingService, } from '@matokit/sdk';
 import fastify from 'fastify';
-import { loadEnv } from './config';
-import { registerReportingRoutes } from './routes/reporting';
-import { registerTrackingRoutes } from './routes/tracking';
+import { loadEnv } from './config.js';
+import { registerReportingRoutes } from './routes/reporting.js';
+import { registerTrackingRoutes } from './routes/tracking.js';
 export async function buildServer(options = {}) {
     const env = options.env ?? loadEnv();
     const matomoClient = options.matomoClient ??
