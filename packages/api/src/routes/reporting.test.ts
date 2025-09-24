@@ -142,7 +142,7 @@ describe('reporting routes', () => {
       (tool: { function?: { name: string } }) => tool.function?.name === 'GetKeyNumbers',
     )?.function;
     expect(keyNumbers?.parameters?.required).toEqual(['period', 'date']);
-    expect(keyNumbers?.responses?.['200']?.content?.['application/json']?.schema.oneOf).toHaveLength(2);
+    expect(keyNumbers?.returns?.oneOf).toHaveLength(2);
 
     const events = manifest.tools.find(
       (tool: { function?: { name: string } }) => tool.function?.name === 'GetEvents',

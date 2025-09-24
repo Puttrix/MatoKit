@@ -114,7 +114,7 @@ const discoveryTools = [
       properties: baseRequestProperties,
       required: ['period', 'date'],
     },
-    successResponseSchema: {
+    returns: {
       $schema: BASE_SCHEMA_URL,
       oneOf: [
         keyNumbersRowSchema,
@@ -145,7 +145,7 @@ const discoveryTools = [
       },
       required: ['period', 'date'],
     },
-    successResponseSchema: {
+    returns: {
       $schema: BASE_SCHEMA_URL,
       type: 'array',
       items: popularUrlRowSchema,
@@ -166,7 +166,7 @@ const discoveryTools = [
       },
       required: ['period', 'date'],
     },
-    successResponseSchema: {
+    returns: {
       $schema: BASE_SCHEMA_URL,
       type: 'array',
       items: referrerRowSchema,
@@ -199,7 +199,7 @@ const discoveryTools = [
       },
       required: ['period', 'date'],
     },
-    successResponseSchema: {
+    returns: {
       $schema: BASE_SCHEMA_URL,
       type: 'array',
       items: eventRowSchema,
@@ -221,22 +221,13 @@ export function buildDiscoveryManifest({ authType }: DiscoveryOptions) {
       function: {
         name: tool.name,
         description: tool.description,
-        transport: {
-          type: 'http',
-          method: tool.method,
-          path: tool.path,
-        },
         parameters: tool.parameters,
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: tool.successResponseSchema,
-              },
-            },
-          },
-        },
+        returns: tool.returns,
+      },
+      transport: {
+        type: 'http',
+        method: tool.method,
+        path: tool.path,
       },
     })),
   };
