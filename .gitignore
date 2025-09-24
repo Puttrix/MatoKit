@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build artifacts
+dist/
+build/
+
+# Test outputs
+coverage/
+*.lcov
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+debug.log
+
+# Editor and OS files
+.DS_Store
+.idea/
+.vscode/
+*.swp
