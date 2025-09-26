@@ -4,10 +4,12 @@ const finiteNumber = z.coerce.number().refine((value) => Number.isFinite(value),
   message: 'Value must be a finite number',
 });
 
-const percentNumber = z
-  .string()
-  .transform((value) => value.trim().replace(/%$/, ''))
-  .pipe(finiteNumber);
+const bounceRateNumber = z.preprocess((value) => {
+  if (typeof value === 'string') {
+    return value.trim().replace(/%$/, '');
+  }
+  return value;
+}, finiteNumber);
 
 export const KeyNumbersRowSchema = z
   .object({
@@ -17,7 +19,7 @@ export const KeyNumbersRowSchema = z
     nb_pageviews: finiteNumber.optional(),
     nb_actions: finiteNumber.optional(),
     sum_visit_length: finiteNumber.optional(),
-    bounce_rate: z.union([finiteNumber, percentNumber]).optional(),
+    bounce_rate: bounceRateNumber.optional(),
     avg_time_on_site: finiteNumber.optional(),
   })
   .passthrough();
