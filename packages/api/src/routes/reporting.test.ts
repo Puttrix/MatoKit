@@ -135,20 +135,30 @@ describe('reporting routes', () => {
     expect(response.statusCode).toBe(200);
 
     const manifest = JSON.parse(response.payload);
-    expect(manifest.tools).toHaveLength(4);
+    expect(manifest.functions).toHaveLength(4);
     expect(manifest.auth).toEqual({ type: 'bearer' });
 
-    const keyNumbers = manifest.tools.find((tool: { name: string }) => tool.name === 'GetKeyNumbers');
-    expect(keyNumbers?.inputSchema?.required).toEqual(['period', 'date']);
-    expect(keyNumbers?.outputSchema?.required).toEqual(['nb_visits']);
+    expect(manifest.functions).toHaveLength(4);
 
-    const events = manifest.tools.find((tool: { name: string }) => tool.name === 'GetEvents');
-    expect(events?.inputSchema?.properties).toMatchObject({
-      category: { type: 'string' },
-      action: { type: 'string' },
-      name: { type: 'string' },
-    });
-    expect(events?.outputSchema?.type).toBe('array');
+    const keyNumbers = manifest.functions.find(
+      (tool: { name: string }) => tool.name === 'GetKeyNumbers',
+    );
+    expect(keyNumbers?.parameters).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'period', required: true }),
+        expect.objectContaining({ name: 'date', required: true }),
+        expect.objectContaining({ name: 'segment', required: false }),
+      ]),
+    );
+
+    const events = manifest.functions.find((tool: { name: string }) => tool.name === 'GetEvents');
+    expect(events?.parameters).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'category', required: false }),
+        expect.objectContaining({ name: 'action', required: false }),
+        expect.objectContaining({ name: 'name', required: false }),
+      ]),
+    );
   });
 
   it('marks cached responses on subsequent calls', async () => {

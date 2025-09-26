@@ -16,35 +16,29 @@ describe('buildDiscoveryManifest', () => {
       auth: { type: 'bearer' },
     });
 
-    expect(manifest.tools).toHaveLength(4);
+    expect(manifest.functions).toHaveLength(4);
 
-    const keyNumbers = manifest.tools.find((tool) => tool.name === 'GetKeyNumbers');
+    const keyNumbers = manifest.functions.find((fn) => fn.name === 'GetKeyNumbers');
     expect(keyNumbers).toMatchObject({
-      type: 'http',
-      method: 'POST',
-      path: '/tools/GetKeyNumbers',
+      endpoint: '/tools/GetKeyNumbers',
+      http_method: 'POST',
     });
-    expect(keyNumbers?.inputSchema).toMatchObject({
-      $schema: 'https://json-schema.org/draft/2020-12/schema',
-      type: 'object',
-      required: ['period', 'date'],
-    });
-    expect(keyNumbers?.outputSchema).toMatchObject({
-      $schema: 'https://json-schema.org/draft/2020-12/schema',
-      type: 'object',
-      required: ['nb_visits'],
-    });
+    expect(keyNumbers?.parameters).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'period', required: true }),
+        expect.objectContaining({ name: 'date', required: true }),
+        expect.objectContaining({ name: 'segment', required: false }),
+      ]),
+    );
 
-    const events = manifest.tools.find((tool) => tool.name === 'GetEvents');
-    expect(events?.inputSchema?.properties).toMatchObject({
-      category: { type: 'string' },
-      action: { type: 'string' },
-      name: { type: 'string' },
-    });
-    expect(events?.outputSchema).toMatchObject({
-      $schema: 'https://json-schema.org/draft/2020-12/schema',
-      type: 'array',
-    });
+    const events = manifest.functions.find((fn) => fn.name === 'GetEvents');
+    expect(events?.parameters).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'category', required: false }),
+        expect.objectContaining({ name: 'action', required: false }),
+        expect.objectContaining({ name: 'name', required: false }),
+      ]),
+    );
   });
 
   it('reflects unauthenticated deployments', () => {

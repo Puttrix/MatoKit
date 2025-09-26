@@ -1,3 +1,5 @@
+import { Function as OpalFunction, Parameter, ParameterType } from '@optimizely-opal/opal-tools-sdk';
+
 import { PERIODS } from './schemas/reporting.js';
 
 export type AuthType = 'bearer' | 'none';
@@ -79,111 +81,213 @@ const eventRowSchema = {
   required: ['label', 'nb_events'],
 };
 
-const discoveryTools = [
+type ParameterDefinition = {
+  name: string;
+  type: ParameterType;
+  description: string;
+  required: boolean;
+};
+
+type DiscoveryFunctionDefinition = {
+  name: string;
+  description: string;
+  path: string;
+  method: 'POST';
+  parameters: ParameterDefinition[];
+};
+
+const discoveryFunctions: DiscoveryFunctionDefinition[] = [
   {
     name: 'GetKeyNumbers',
     description: 'Fetch Matomo key metrics (visits, users, pageviews, etc.) for a site/date range.',
-    method: 'POST',
     path: '/tools/GetKeyNumbers',
-    inputSchema: {
-      type: 'object',
-      properties: baseRequestProperties,
-      required: ['period', 'date'],
-    },
-    outputSchema: {
-      type: 'object',
-      properties: keyNumbersRowSchema.properties,
-      required: keyNumbersRowSchema.required,
-    },
+    method: 'POST',
+    parameters: [
+      {
+        name: 'siteId',
+        type: ParameterType.Integer,
+        description: 'Matomo site ID. Defaults to DEFAULT_SITE_ID when omitted.',
+        required: false,
+      },
+      {
+        name: 'period',
+        type: ParameterType.String,
+        description: `Matomo period (${PERIODS.join(', ')}).`,
+        required: true,
+      },
+      {
+        name: 'date',
+        type: ParameterType.String,
+        description: 'Date expression accepted by Matomo (e.g. 2024-03-01, today, last7).',
+        required: true,
+      },
+      {
+        name: 'segment',
+        type: ParameterType.String,
+        description: 'Optional Matomo segment expression (see Matomo segmentation docs).',
+        required: false,
+      },
+    ],
   },
   {
     name: 'GetMostPopularUrls',
     description: 'Return the most visited URLs for the specified period.',
-    method: 'POST',
     path: '/tools/GetMostPopularUrls',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        ...baseRequestProperties,
-        limit: {
-          type: 'integer',
-          description: 'Maximum rows to return (defaults vary by endpoint).',
-        },
-        flat: {
-          type: 'boolean',
-          description: 'Set false to include hierarchical labels instead of flat list.',
-        },
+    method: 'POST',
+    parameters: [
+      {
+        name: 'siteId',
+        type: ParameterType.Integer,
+        description: 'Matomo site ID. Defaults to DEFAULT_SITE_ID when omitted.',
+        required: false,
       },
-      required: ['period', 'date'],
-    },
-    outputSchema: {
-      type: 'array',
-      items: popularUrlRowSchema,
-    },
+      {
+        name: 'period',
+        type: ParameterType.String,
+        description: `Matomo period (${PERIODS.join(', ')}).`,
+        required: true,
+      },
+      {
+        name: 'date',
+        type: ParameterType.String,
+        description: 'Date expression accepted by Matomo (e.g. today, last7, 2024-03-01).',
+        required: true,
+      },
+      {
+        name: 'segment',
+        type: ParameterType.String,
+        description: 'Optional Matomo segment expression (see Matomo segmentation docs).',
+        required: false,
+      },
+      {
+        name: 'limit',
+        type: ParameterType.Integer,
+        description: 'Maximum rows to return (defaults vary by endpoint).',
+        required: false,
+      },
+      {
+        name: 'flat',
+        type: ParameterType.Boolean,
+        description: 'Set false to include hierarchical labels instead of flat list.',
+        required: false,
+      },
+    ],
   },
   {
     name: 'GetTopReferrers',
     description: 'Fetch top referrers driving traffic to the site.',
-    method: 'POST',
     path: '/tools/GetTopReferrers',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        ...baseRequestProperties,
-        limit: {
-          type: 'integer',
-          description: 'Maximum rows to return (defaults vary by endpoint).',
-        },
+    method: 'POST',
+    parameters: [
+      {
+        name: 'siteId',
+        type: ParameterType.Integer,
+        description: 'Matomo site ID. Defaults to DEFAULT_SITE_ID when omitted.',
+        required: false,
       },
-      required: ['period', 'date'],
-    },
-    outputSchema: {
-      type: 'array',
-      items: referrerRowSchema,
-    },
+      {
+        name: 'period',
+        type: ParameterType.String,
+        description: `Matomo period (${PERIODS.join(', ')}).`,
+        required: true,
+      },
+      {
+        name: 'date',
+        type: ParameterType.String,
+        description: 'Date expression accepted by Matomo (e.g. today, last7, 2024-03-01).',
+        required: true,
+      },
+      {
+        name: 'segment',
+        type: ParameterType.String,
+        description: 'Optional Matomo segment expression (see Matomo segmentation docs).',
+        required: false,
+      },
+      {
+        name: 'limit',
+        type: ParameterType.Integer,
+        description: 'Maximum rows to return (defaults vary by endpoint).',
+        required: false,
+      },
+    ],
   },
   {
     name: 'GetEvents',
     description: 'Return Matomo events filtered by category/action/name.',
-    method: 'POST',
     path: '/tools/GetEvents',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        ...baseRequestProperties,
-        category: {
-          type: 'string',
-          description: 'Event category filter (optional).',
-        },
-        action: {
-          type: 'string',
-          description: 'Event action filter (optional).',
-        },
-        name: {
-          type: 'string',
-          description: 'Event name filter (optional).',
-        },
-        limit: {
-          type: 'integer',
-          description: 'Maximum rows to return (defaults vary by endpoint).',
-        },
+    method: 'POST',
+    parameters: [
+      {
+        name: 'siteId',
+        type: ParameterType.Integer,
+        description: 'Matomo site ID. Defaults to DEFAULT_SITE_ID when omitted.',
+        required: false,
       },
-      required: ['period', 'date'],
-    },
-    outputSchema: {
-      type: 'array',
-      items: eventRowSchema,
-    },
+      {
+        name: 'period',
+        type: ParameterType.String,
+        description: `Matomo period (${PERIODS.join(', ')}).`,
+        required: true,
+      },
+      {
+        name: 'date',
+        type: ParameterType.String,
+        description: 'Date expression accepted by Matomo (e.g. today, last7, 2024-03-01).',
+        required: true,
+      },
+      {
+        name: 'segment',
+        type: ParameterType.String,
+        description: 'Optional Matomo segment expression (see Matomo segmentation docs).',
+        required: false,
+      },
+      {
+        name: 'category',
+        type: ParameterType.String,
+        description: 'Event category filter (optional).',
+        required: false,
+      },
+      {
+        name: 'action',
+        type: ParameterType.String,
+        description: 'Event action filter (optional).',
+        required: false,
+      },
+      {
+        name: 'name',
+        type: ParameterType.String,
+        description: 'Event name filter (optional).',
+        required: false,
+      },
+      {
+        name: 'limit',
+        type: ParameterType.Integer,
+        description: 'Maximum rows to return (defaults vary by endpoint).',
+        required: false,
+      },
+    ],
   },
 ];
 
-const JSON_SCHEMA_VERSION = 'https://json-schema.org/draft/2020-12/schema';
+function buildOpalFunction(definition: DiscoveryFunctionDefinition): OpalFunction {
+  const parameters = definition.parameters.map(
+    (param) => new Parameter(param.name, param.type, param.description, param.required),
+  );
 
-function withJsonSchema<T extends Record<string, unknown>>(schema: T) {
-  return { $schema: JSON_SCHEMA_VERSION, ...schema };
+  const opalFunction = new OpalFunction(
+    definition.name,
+    definition.description,
+    parameters,
+    definition.path,
+  );
+
+  opalFunction.httpMethod = definition.method;
+  return opalFunction;
 }
 
 export function buildDiscoveryManifest({ authType }: DiscoveryOptions) {
+  const functions = discoveryFunctions.map(buildOpalFunction).map((fn) => fn.toJSON());
+
   return {
     schemaVersion: '1',
     service: {
@@ -192,14 +296,6 @@ export function buildDiscoveryManifest({ authType }: DiscoveryOptions) {
       version: '0.1.0',
     },
     auth: { type: authType },
-    tools: discoveryTools.map((tool) => ({
-      name: tool.name,
-      description: tool.description,
-      type: 'http',
-      method: tool.method,
-      path: tool.path,
-      inputSchema: withJsonSchema(tool.inputSchema),
-      outputSchema: withJsonSchema(tool.outputSchema),
-    })),
+    functions,
   };
 }
