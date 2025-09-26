@@ -14,9 +14,9 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: production
-      MATOMO_BASE_URL: https://demo.matomo.cloud/
+      MATOMO_BASE_URL: https://matomo.surputte.se/
       # MATOMO_TOKEN: your-matomo-token
       DEFAULT_SITE_ID: 1
-      OPAL_BEARER_TOKEN: change-me
+      #OPAL_BEARER_TOKEN: change-me
       PORT: 3000
       HOST: 0.0.0.0

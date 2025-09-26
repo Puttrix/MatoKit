@@ -1,8 +1,56 @@
 import { z } from 'zod';
 
-const finiteNumber = z.coerce.number().refine((value) => Number.isFinite(value), {
-  message: 'Value must be a finite number',
-});
+function parseDurationString(value: string): number | undefined {
+  const trimmed = value.trim();
+  if (!trimmed.includes(':')) {
+    return undefined;
+  }
+
+  const segments = trimmed.split(':');
+  if (segments.length < 2 || segments.length > 3) {
+    return undefined;
+  }
+
+  const numbers = segments.map((segment) => Number(segment));
+  if (numbers.some((segment) => Number.isNaN(segment) || segment < 0)) {
+    return undefined;
+  }
+
+  if (segments.length === 2) {
+    const [minutes, seconds] = numbers;
+    return minutes * 60 + seconds;
+  }
+
+  const [hours, minutes, seconds] = numbers;
+  return hours * 3600 + minutes * 60 + seconds;
+}
+
+function normalizeMatomoNumeric(value: unknown): unknown {
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      return trimmed;
+    }
+
+    const duration = parseDurationString(trimmed);
+    if (duration !== undefined) {
+      return duration;
+    }
+
+    const normalized = trimmed.replace(/,/g, '');
+    const parsed = Number(normalized);
+    if (!Number.isNaN(parsed)) {
+      return parsed;
+    }
+  }
+
+  return value;
+}
+
+const finiteNumber = z
+  .preprocess(normalizeMatomoNumeric, z.number().refine((value) => Number.isFinite(value), {
+    message: 'Value must be a finite number',
+  }));
 
 const bounceRateNumber = z.preprocess((value) => {
   if (typeof value === 'string') {
