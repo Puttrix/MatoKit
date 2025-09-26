@@ -85,12 +85,12 @@ const discoveryTools = [
     description: 'Fetch Matomo key metrics (visits, users, pageviews, etc.) for a site/date range.',
     method: 'POST',
     path: '/tools/GetKeyNumbers',
-    parameters: {
+    inputSchema: {
       type: 'object',
       properties: baseRequestProperties,
       required: ['period', 'date'],
     },
-    returns: {
+    outputSchema: {
       type: 'object',
       properties: keyNumbersRowSchema.properties,
       required: keyNumbersRowSchema.required,
@@ -101,7 +101,7 @@ const discoveryTools = [
     description: 'Return the most visited URLs for the specified period.',
     method: 'POST',
     path: '/tools/GetMostPopularUrls',
-    parameters: {
+    inputSchema: {
       type: 'object',
       properties: {
         ...baseRequestProperties,
@@ -116,7 +116,7 @@ const discoveryTools = [
       },
       required: ['period', 'date'],
     },
-    returns: {
+    outputSchema: {
       type: 'array',
       items: popularUrlRowSchema,
     },
@@ -126,7 +126,7 @@ const discoveryTools = [
     description: 'Fetch top referrers driving traffic to the site.',
     method: 'POST',
     path: '/tools/GetTopReferrers',
-    parameters: {
+    inputSchema: {
       type: 'object',
       properties: {
         ...baseRequestProperties,
@@ -137,7 +137,7 @@ const discoveryTools = [
       },
       required: ['period', 'date'],
     },
-    returns: {
+    outputSchema: {
       type: 'array',
       items: referrerRowSchema,
     },
@@ -147,7 +147,7 @@ const discoveryTools = [
     description: 'Return Matomo events filtered by category/action/name.',
     method: 'POST',
     path: '/tools/GetEvents',
-    parameters: {
+    inputSchema: {
       type: 'object',
       properties: {
         ...baseRequestProperties,
@@ -170,12 +170,18 @@ const discoveryTools = [
       },
       required: ['period', 'date'],
     },
-    returns: {
+    outputSchema: {
       type: 'array',
       items: eventRowSchema,
     },
   },
 ];
+
+const JSON_SCHEMA_VERSION = 'https://json-schema.org/draft/2020-12/schema';
+
+function withJsonSchema<T extends Record<string, unknown>>(schema: T) {
+  return { $schema: JSON_SCHEMA_VERSION, ...schema };
+}
 
 export function buildDiscoveryManifest({ authType }: DiscoveryOptions) {
   return {
@@ -187,18 +193,13 @@ export function buildDiscoveryManifest({ authType }: DiscoveryOptions) {
     },
     auth: { type: authType },
     tools: discoveryTools.map((tool) => ({
-      type: 'function',
-      function: {
-        name: tool.name,
-        description: tool.description,
-        parameters: tool.parameters,
-        returns: tool.returns,
-      },
-      transport: {
-        type: 'http',
-        method: tool.method,
-        path: tool.path,
-      },
+      name: tool.name,
+      description: tool.description,
+      type: 'http',
+      method: tool.method,
+      path: tool.path,
+      inputSchema: withJsonSchema(tool.inputSchema),
+      outputSchema: withJsonSchema(tool.outputSchema),
     })),
   };
 }

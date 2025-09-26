@@ -138,21 +138,17 @@ describe('reporting routes', () => {
     expect(manifest.tools).toHaveLength(4);
     expect(manifest.auth).toEqual({ type: 'bearer' });
 
-    const keyNumbers = manifest.tools.find(
-      (tool: { function?: { name: string } }) => tool.function?.name === 'GetKeyNumbers',
-    )?.function;
-    expect(keyNumbers?.parameters?.required).toEqual(['period', 'date']);
-    expect(keyNumbers?.returns?.required).toEqual(['nb_visits']);
+    const keyNumbers = manifest.tools.find((tool: { name: string }) => tool.name === 'GetKeyNumbers');
+    expect(keyNumbers?.inputSchema?.required).toEqual(['period', 'date']);
+    expect(keyNumbers?.outputSchema?.required).toEqual(['nb_visits']);
 
-    const events = manifest.tools.find(
-      (tool: { function?: { name: string } }) => tool.function?.name === 'GetEvents',
-    )?.function;
-    expect(events?.parameters?.properties).toMatchObject({
+    const events = manifest.tools.find((tool: { name: string }) => tool.name === 'GetEvents');
+    expect(events?.inputSchema?.properties).toMatchObject({
       category: { type: 'string' },
       action: { type: 'string' },
       name: { type: 'string' },
     });
-    expect(events?.returns?.type).toBe('array');
+    expect(events?.outputSchema?.type).toBe('array');
   });
 
   it('marks cached responses on subsequent calls', async () => {

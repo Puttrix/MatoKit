@@ -12,12 +12,12 @@ import {
 } from './reporting.js';
 
 describe('reporting schemas', () => {
-  it('coerces numeric strings in key numbers rows', () => {
+  it('coerces numeric strings (including percentages) in key numbers rows', () => {
     const parsed = KeyNumbersRowSchema.parse({
       nb_visits: '10',
       nb_users: '5',
       nb_pageviews: '40',
-      bounce_rate: '60.5',
+      bounce_rate: '60.5%',
     });
 
     expect(parsed).toMatchObject({

@@ -4,6 +4,11 @@ const finiteNumber = z.coerce.number().refine((value) => Number.isFinite(value),
   message: 'Value must be a finite number',
 });
 
+const percentNumber = z
+  .string()
+  .transform((value) => value.trim().replace(/%$/, ''))
+  .pipe(finiteNumber);
+
 export const KeyNumbersRowSchema = z
   .object({
     nb_visits: finiteNumber,
@@ -12,7 +17,7 @@ export const KeyNumbersRowSchema = z
     nb_pageviews: finiteNumber.optional(),
     nb_actions: finiteNumber.optional(),
     sum_visit_length: finiteNumber.optional(),
-    bounce_rate: finiteNumber.optional(),
+    bounce_rate: z.union([finiteNumber, percentNumber]).optional(),
     avg_time_on_site: finiteNumber.optional(),
   })
   .passthrough();
